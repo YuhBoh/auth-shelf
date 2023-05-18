@@ -6,14 +6,39 @@ const router = express.Router();
  * Get all of the items on the shelf
  */
 router.get('/', (req, res) => {
-  res.sendStatus(200); // For testing only, can be removed
+  const query = `SELECT * FROM "item";`;
+  pool.query(query)
+    .then(result => {
+      res.send(result.rows);
+    })
+    .catch(err => {
+      console.log('ERROR: Get all items', err);
+      res.sendStatus(500)
+    })
+
 });
 
 /**
  * Add an item for the logged in user to the shelf
  */
 router.post('/', (req, res) => {
-  // endpoint functionality
+  const description = req.body.description;
+  const imgUrl = req.body.image_url;
+  const userId = req.user.id;
+  const sqlValues = [description, imgUrl, userId]
+  const queryText = `
+    INSERT INTO "item" 
+    (description, image_url, user_id)
+    VALUES ($1, $2, $3);
+  `;
+  
+  pool
+    .query(queryText,sqlValues)
+    .then(() => res.sendStatus(201))
+    .catch((err) => {
+      console.log('shelf post failed: ', err);
+      res.sendStatus(500);
+    });
 });
 
 /**
@@ -21,6 +46,21 @@ router.post('/', (req, res) => {
  */
 router.delete('/:id', (req, res) => {
   // endpoint functionality
+  const userId = req.user.id;
+  const itemId = req.params.id;
+  const sqlValue = [itemId];
+  const queryText = `
+    DELETE FROM "item" 
+    WHERE id = $1;
+  `;
+  pool
+    .query(queryText, sqlValue)
+    .then(() => res.sendStatus(201))
+    .catch((err) => {
+      console.log('shelf delete failed: ', err);
+      res.sendStatus(500);
+    });
+  
 });
 
 /**
