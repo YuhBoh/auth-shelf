@@ -1,8 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState  } from "react";
 //impoty useState:
-import { useState } from "react";
 
 //This is where store goes -->
 
@@ -30,8 +29,8 @@ function ShelfPage() {
         }
       })
       //Reset input fields:
-        setDescription = useState("");
-        setImgUrl = useState("");
+        setDescription("");
+        setImgUrl("");
   }
   //Delete Handler function:
   const deleteHandler = (item) => {
@@ -67,7 +66,7 @@ function ShelfPage() {
           <div key={item.id}>
             <h3>{item.description}</h3>
             <img src={item.image_url} />
-            <button onClick={()=> {deleteHandler(item)}}>DELETE</button> 
+            <button onClick={() => {deleteHandler(item)}}>DELETE</button> 
           </div>
         );
       })}

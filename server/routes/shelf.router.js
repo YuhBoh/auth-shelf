@@ -48,10 +48,10 @@ router.delete('/:id', (req, res) => {
   // endpoint functionality
   const userId = req.user.id;
   const itemId = req.params.id;
-  const sqlValue = [itemId];
+  const sqlValue = [itemId, userId];
   const queryText = `
     DELETE FROM "item" 
-    WHERE id = $1;
+    WHERE id = $1 AND user_id = $2;
   `;
   pool
     .query(queryText, sqlValue)
