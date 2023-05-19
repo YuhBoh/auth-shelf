@@ -21,6 +21,7 @@ else {
     pool = new pg.Pool({
         host: 'localhost',
         port: 5432,
+        max: 10, //max # of connections for pool.
         database: 'auth_shelf', 
     });
 }
